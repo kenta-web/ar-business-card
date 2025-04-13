@@ -10,7 +10,7 @@ export default function ClientAR({ data }: { data: any }) {
 
   return (
     <iframe
-      src="/view/marker/index.html"
+      src={`/view/marker/index.html?${query}`}
       style={{
         width: "100vw",
         height: "100vh",
