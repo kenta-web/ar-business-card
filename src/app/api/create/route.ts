@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createServerClient } from "@/lib/supabase/server";
 import { v4 as uuidv4 } from "uuid";
 import QRCode from "qrcode";
 import { NextRequest } from "next/server";
@@ -12,10 +12,7 @@ import { NextRequest } from "next/server";
 export const dynamic = "force-dynamic"; // App Router用設定
 export const runtime = "nodejs";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const supabase = createServerClient();
 
 // カードデータの型定義
 interface CardData {
