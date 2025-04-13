@@ -74,9 +74,7 @@ export async function POST(req: NextRequest) {
     //     status: 500,
     //   });
     // }
-
-    const viewUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/view/${id}`;
-    const qrUrl = await QRCode.toDataURL(viewUrl);
+    const qrUrl = await makeQRCode(id);
 
     return new Response(JSON.stringify({ qrUrl }), { status: 200 });
   } catch (err: unknown) {
@@ -85,4 +83,10 @@ export async function POST(req: NextRequest) {
       status: 500,
     });
   }
+}
+
+// QRコードを生成する関数
+async function makeQRCode(id: string): Promise<string> {
+  const viewUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/view/${id}`;
+  return await QRCode.toDataURL(viewUrl);
 }
