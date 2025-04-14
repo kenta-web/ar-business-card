@@ -38,22 +38,42 @@
           width="1"
           rotation="0 0 0"
         ></a-text>
+        <a-plane
+          id="nameText"
+          width="2"
+          height="0.5"
+          color="white"
+          opacity="0"
+          position="0 0 -3"
+        ></a-plane>
       </a-entity>
     </a-scene>
     <script>
-      console.log("location.search", location.search);
       const params = new URLSearchParams(location.search);
-      console.log("params", params.get("name"));
-      const name = params.get("name") || "No Name";
-      console.log("name", name);
-      document.querySelector("a-scene").addEventListener("loaded", () => {
-        const nameText = document.querySelector("#nameText");
-        console.log("nameText", nameText);
-        if (nameText) {
-          nameText.setAttribute("value", name);
-        } else {
-          console.warn("⚠️ #nameText not found");
-        }
+      const name = params.get("name") || "山田太郎";
+
+      document.fonts.ready.then(() => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 1024;
+        canvas.height = 256;
+
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "white";
+        ctx.font = "bold 80px 'Noto Sans JP'";
+        ctx.textAlign = "center";
+        ctx.fillText(name, canvas.width / 2, 160);
+
+        const texture = new AFRAME.THREE.CanvasTexture(canvas);
+        const material = new AFRAME.THREE.MeshBasicMaterial({
+          map: texture,
+          transparent: true,
+        });
+
+        const mesh = new AFRAME.THREE.Mesh(
+          new AFRAME.THREE.PlaneGeometry(2, 0.5),
+          material
+        );
+        document.querySelector("#nameText").setObject3D("mesh", mesh);
       });
     </script>
   </body>
