@@ -51,17 +51,22 @@
     <script>
       const params = new URLSearchParams(location.search);
       const name = params.get("name") || "山田太郎";
+      const company = params.get("company") || "株式会社";
+      const position = params.get("position") || "代表取締役";
 
       document.fonts.ready.then(() => {
         const canvas = document.createElement("canvas");
-        canvas.width = 1024;
-        canvas.height = 256;
+        canvas.width = 2048;
+        canvas.height = 1024;
 
         const ctx = canvas.getContext("2d");
         ctx.fillStyle = "white";
         ctx.font = "bold 80px 'Noto Sans JP'";
         ctx.textAlign = "center";
-        ctx.fillText(name, canvas.width / 2, 160);
+        ctx.fillText(name, canvas.width / 2, 300);
+        ctx.font = "bold 'Noto Sans JP'";
+        ctx.fillText(company, canvas.width / 2, 200);
+        ctx.fillText(position, canvas.width / 2, 10);
 
         const texture = new AFRAME.THREE.CanvasTexture(canvas);
         const material = new AFRAME.THREE.MeshBasicMaterial({
