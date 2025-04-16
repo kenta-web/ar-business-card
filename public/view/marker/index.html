@@ -34,51 +34,79 @@
         <a-text
           id="nameText"
           value=""
-          position="0 0 0"
-          width="1"
-          rotation="0 0 0"
-        ></a-text>
-        <a-plane
-          id="nameText"
+          position="0.5 0 0"
           width="2"
           height="0.5"
-          color="white"
+          color="red"
           opacity="0"
-          position="0 0 -3"
-        ></a-plane>
+          rotation="0 0 0"
+        ></a-text>
+        <a-text
+          id="companyText"
+          value=""
+          position="-0.5 0 0"
+          width="2"
+          height="0.5"
+          color="red"
+          opacity="0"
+          rotation="0 0 0"
+        ></a-text>
       </a-entity>
     </a-scene>
     <script>
       const params = new URLSearchParams(location.search);
       const name = params.get("name") || "山田太郎";
       const company = params.get("company") || "株式会社";
-      const position = params.get("position") || "代表取締役";
 
       document.fonts.ready.then(() => {
         const canvas = document.createElement("canvas");
-        canvas.width = 2048;
-        canvas.height = 1024;
-
+        canvas.width = 1024;
+        canvas.height = 256;
         const ctx = canvas.getContext("2d");
+
+        // 背景透明にして文字描画
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
         ctx.font = "bold 80px 'Noto Sans JP'";
         ctx.textAlign = "center";
-        ctx.fillText(name, canvas.width / 2, 300);
-        ctx.font = "bold 'Noto Sans JP'";
-        ctx.fillText(company, canvas.width / 2, 200);
-        ctx.fillText(position, canvas.width / 2, 10);
+        ctx.fillText(name, canvas.width / 2, 160);
 
+        // 会社名用のキャンバス
+        const companyCanvas = document.createElement("canvas");
+        companyCanvas.width = 1024;
+        companyCanvas.height = 256;
+        const companyCtx = companyCanvas.getContext("2d");
+        companyCtx.clearRect(0, 0, companyCanvas.width, companyCanvas.height);
+        companyCtx.fillStyle = "white";
+        companyCtx.font = "bold 80px 'Noto Sans JP'";
+        companyCtx.textAlign = "center";
+        companyCtx.fillText(company, companyCanvas.width / 2, 160);
+
+        // Canvas → Texture → Mesh
         const texture = new AFRAME.THREE.CanvasTexture(canvas);
         const material = new AFRAME.THREE.MeshBasicMaterial({
           map: texture,
           transparent: true,
         });
-
         const mesh = new AFRAME.THREE.Mesh(
-          new AFRAME.THREE.PlaneGeometry(2, 0.5),
+          new AFRAME.THREE.PlaneGeometry(1.5, 0.5),
           material
         );
+
+        // 会社名用のテクスチャとメッシュ
+        const companyTexture = new AFRAME.THREE.CanvasTexture(companyCanvas);
+        const companyMaterial = new AFRAME.THREE.MeshBasicMaterial({
+          map: companyTexture,
+          transparent: true,
+        });
+        const companyMesh = new AFRAME.THREE.Mesh(
+          new AFRAME.THREE.PlaneGeometry(1.5, 0.5),
+          companyMaterial
+        );
+
+        // nameText plane に表示
         document.querySelector("#nameText").setObject3D("mesh", mesh);
+        document.querySelector("#companyText").setObject3D("mesh", companyMesh);
       });
     </script>
   </body>
