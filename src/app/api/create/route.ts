@@ -22,52 +22,26 @@ interface CardData {
   position: string;
   twitter: string;
   website: string;
-  face_url: string;
 }
 
 export async function POST(req: NextRequest) {
-  // const webStream = req.body;
-  // const reqStream = Readable.fromWeb(webStream as any) as IncomingMessage;
-
-  // const form = new IncomingForm({ keepExtensions: true });
-  // const parseForm = promisify(form.parse);
-
   try {
-    //   const formFields = await parseForm(reqStream);
+    const formFields = await req.formData();
 
-    // const name = formFields.name?.[0] || "";
-    // const company = formFields.company?.[0] || "";
-    // const position = formFields.position?.[0] || "";
-    // const twitter = formFields.twitter?.[0] || "";
-    // const website = formFields.website?.[0] || "";
-    // const face = formFields.face;
+    const name = formFields.get("name") || "";
+    const company = formFields.get("company") || "";
+    const position = formFields.get("position") || "";
+    const twitter = formFields.get("twitter") || "";
+    const website = formFields.get("website") || "";
 
-    // const filePath = "https://example.com/";
-    // const content = fs.readFileSync(filePath);
-
-    // const uploadRes = await supabase.storage
-    //   .from("faces")
-    //   .upload(`${id}.jpg`, content, {
-    //     contentType: face[0].mimetype || "image/jpeg",
-    //   });
-
-    // if (uploadRes.error) {
-    //   return new Response(JSON.stringify({ error: uploadRes.error.message }), {
-    //     status: 500,
-    //   });
-    // }
-
-    // const publicURL = supabase.storage.from("faces").getPublicUrl(`${id}.jpg`)
-    // .data.publicUrl;
     const id = uuidv4();
     const cardData: CardData = {
       id,
-      name: "田中",
-      company: "株式会社",
-      position: "代表取締役",
-      twitter: "https://x.com/",
-      website: "https://example.com/",
-      face_url: "https://example.com/",
+      name: name as string,
+      company: company as string,
+      position: position as string,
+      twitter: twitter as string,
+      website: website as string,
     };
 
     // データを保存

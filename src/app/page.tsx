@@ -10,14 +10,12 @@ export default function ARCardForm() {
     position: string;
     twitter: string;
     website: string;
-    face: File | null;
   }>({
     name: "",
     company: "",
     position: "",
     twitter: "",
     website: "",
-    face: null,
   });
 
   const [qrUrl, setQrUrl] = useState("");
@@ -26,11 +24,6 @@ export default function ARCardForm() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, face: e.target.files?.[0] ?? null }));
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -90,13 +83,6 @@ export default function ARCardForm() {
           placeholder="WebサイトURL（任意）"
           onChange={handleChange}
           className="w-full border p-2 rounded"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          required
-          className="w-full"
         />
         <button
           type="submit"
