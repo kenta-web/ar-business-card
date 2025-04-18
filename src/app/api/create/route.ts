@@ -2,12 +2,6 @@ import { createServerClient } from "@/lib/supabase/server";
 import { v4 as uuidv4 } from "uuid";
 import QRCode from "qrcode";
 import { NextRequest } from "next/server";
-// import { Readable } from "stream";
-// import { IncomingForm } from "formidable";
-// import { IncomingMessage } from "http";
-// import fs from "fs";
-// import { promisify } from "util";
-// import path from "path";
 
 export const dynamic = "force-dynamic"; // App Router用設定
 export const runtime = "nodejs";
@@ -22,6 +16,7 @@ interface CardData {
   position: string;
   twitter: string;
   website: string;
+  face_url: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -33,7 +28,7 @@ export async function POST(req: NextRequest) {
     const position = formFields.get("position") || "";
     const twitter = formFields.get("twitter") || "";
     const website = formFields.get("website") || "";
-
+    const face_url = formFields.get("face_url") || "";
     const id = uuidv4();
     const cardData: CardData = {
       id,
@@ -42,6 +37,7 @@ export async function POST(req: NextRequest) {
       position: position as string,
       twitter: twitter as string,
       website: website as string,
+      face_url: face_url as string,
     };
 
     // データを保存
