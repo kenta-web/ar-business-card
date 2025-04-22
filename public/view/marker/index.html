@@ -130,6 +130,9 @@
       const params = new URLSearchParams(location.search);
       const name = params.get("name") || "山田太郎";
       const company = params.get("company") || "株式会社";
+      const position = params.get("position") || "代表取締役";
+      const twitter = params.get("twitter") || "https://x.com/";
+      const website = params.get("website") || "https://example.com/";
 
       document.fonts.ready.then(() => {
         const canvas = document.createElement("canvas");
@@ -155,6 +158,24 @@
         companyCtx.textAlign = "center";
         companyCtx.fillText(company, companyCanvas.width / 2, 160);
 
+        // 部署名用のキャンバス
+        const positionCanvas = document.createElement("canvas");
+        positionCanvas.width = 1024;
+        positionCanvas.height = 256;
+        const positionCtx = positionCanvas.getContext("2d");
+
+        // ツイッター用のキャンバス
+        const twitterCanvas = document.createElement("canvas");
+        twitterCanvas.width = 1024;
+        twitterCanvas.height = 256;
+        const twitterCtx = twitterCanvas.getContext("2d");
+
+        // ウェブサイト用のキャンバス
+        const websiteCanvas = document.createElement("canvas");
+        websiteCanvas.width = 1024;
+        websiteCanvas.height = 256;
+        const websiteCtx = websiteCanvas.getContext("2d");
+
         // Canvas → Texture → Mesh
         const texture = new AFRAME.THREE.CanvasTexture(canvas);
         const material = new AFRAME.THREE.MeshBasicMaterial({
@@ -177,9 +198,33 @@
           companyMaterial
         );
 
+        // 部署名用のテクスチャとメッシュ
+        const positionTexture = new AFRAME.THREE.CanvasTexture(positionCanvas);
+        const positionMaterial = new AFRAME.THREE.MeshBasicMaterial({
+          map: positionTexture,
+          transparent: true,
+        });
+
+        // ツイッター用のテクスチャとメッシュ
+        const twitterTexture = new AFRAME.THREE.CanvasTexture(twitterCanvas);
+        const twitterMaterial = new AFRAME.THREE.MeshBasicMaterial({
+          map: twitterTexture,
+          transparent: true,
+        });
+
+        // ウェブサイト用のテクスチャとメッシュ
+        const websiteTexture = new AFRAME.THREE.CanvasTexture(websiteCanvas);
+        const websiteMaterial = new AFRAME.THREE.MeshBasicMaterial({
+          map: websiteTexture,
+          transparent: true,
+        }); 
+
         // nameText plane に表示
         document.querySelector("#nameText").setObject3D("mesh", mesh);
         document.querySelector("#companyText").setObject3D("mesh", companyMesh);
+        document.querySelector("#positionText").setObject3D("mesh", positionMesh);
+        document.querySelector("#twitterText").setObject3D("mesh", twitterMesh);
+        document.querySelector("#websiteText").setObject3D("mesh", websiteMesh);
       });
     </script>
   </body>
