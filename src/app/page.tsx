@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
+import { createARCard } from "./actions";
 
 export default function ARCardForm() {
   const [formData, setFormData] = useState({
@@ -13,6 +13,7 @@ export default function ARCardForm() {
   });
 
   const [qrUrl, setQrUrl] = useState("");
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -21,13 +22,15 @@ export default function ARCardForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
     const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => data.append(key, value));
     try {
-      const res = await axios.post("/api/create", data);
-      setQrUrl(res.data.qrUrl);
+      const result = await createARCard(data);
+      setQrUrl(result.qrUrl);
     } catch (err) {
       console.error("Failed to submit form", err);
+      setError("フォームの送信に失敗しました。もう一度お試しください。");
     }
   };
 
@@ -38,6 +41,12 @@ export default function ARCardForm() {
         <p className="text-gray-600 mb-6">
           必要事項を入力してください。QRコードが自動生成されます。
         </p>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {[
